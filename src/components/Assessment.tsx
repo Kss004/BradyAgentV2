@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Timer, HelpCircle, CheckCircle2, ArrowRight, MessageSquare, Info } from 'lucide-react';
 import { Screen } from '../types';
-const m211Image = "https://picsum.photos/seed/m211/800/600";
+import m211Image from '../assets/m211.jpg';
 
 interface AssessmentProps {
   onNavigate: (screen: Screen) => void;
@@ -12,10 +12,10 @@ export default function Assessment({ onNavigate }: AssessmentProps) {
   const [isAnswered, setIsAnswered] = useState(false);
 
   const options = [
-    "The 128-bit encryption standard is only active during idle states.",
-    "The M211 uses a decentralized-ready kernel for cloud-to-edge transitions.",
-    "It requires a manual hardware switch to toggle between legacy and modern modes.",
-    "The architecture is limited to 500GB/s throughput in standard configurations."
+    "Enterprise data server",
+    "Portable Bluetooth label printer",
+    "Network router",
+    "Industrial barcode scanner"
   ];
 
   const handleOptionSelect = (index: number) => {
@@ -56,9 +56,9 @@ export default function Assessment({ onNavigate }: AssessmentProps) {
         </div>
 
         <div className="relative z-10">
-          <span className="px-3 py-1 bg-primary/5 text-primary rounded-full font-display text-[10px] font-extrabold tracking-widest uppercase mb-6 inline-block">TECHNICAL ARCHITECTURE</span>
+          <span className="px-3 py-1 bg-primary/5 text-primary rounded-full font-display text-[10px] font-extrabold tracking-widest uppercase mb-6 inline-block">PRODUCT KNOWLEDGE</span>
           <h2 className="text-3xl font-bold font-display text-on-surface leading-tight mb-10 max-w-2xl">
-            Based on the M211 Enterprise Core specifications, which statement accurately describes its primary architectural differentiator?
+            What type of device is the Brady M211?
           </h2>
 
           {/* Options List */}
@@ -154,7 +154,7 @@ export default function Assessment({ onNavigate }: AssessmentProps) {
               <h4 className="font-bold text-on-surface">Why this is correct</h4>
             </div>
             <p className="text-sm text-on-surface-variant leading-relaxed">
-              The M211's decentralized kernel is its core innovation, allowing it to process data at the edge without constant cloud synchronization. This is a key selling point for high-security environments.
+              The M211 is a handheld industrial label printer that connects directly to a smartphone via Bluetooth. It does not function as a server, router, or scanner.
             </p>
           </div>
           <div className="p-8 bg-primary/5 rounded-lg border-l-4 border-primary">
@@ -165,7 +165,7 @@ export default function Assessment({ onNavigate }: AssessmentProps) {
               <h4 className="font-bold text-on-surface">Sales Tip</h4>
             </div>
             <p className="text-sm text-on-surface-variant leading-relaxed italic">
-              "When a client asks about latency, lead with the decentralized kernel. It's the technical proof of the performance gains you're promising."
+              "When a client asks for flexibility, lead with the fact that it's a completely portable Bluetooth printer controlled directly from their phone, eliminating the need for bulky keyboards on the job site."
             </p>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function Assessment({ onNavigate }: AssessmentProps) {
           <div className="mb-4 rounded-lg overflow-hidden bg-surface-container/50 p-2">
             <img src={m211Image} alt="M211 Reference" className="w-full h-24 object-contain" referrerPolicy="no-referrer" />
           </div>
-          <p className="text-xs text-on-surface-variant leading-relaxed mb-4">Review the architecture diagram if you're unsure about the kernel structure.</p>
+          <p className="text-xs text-on-surface-variant leading-relaxed mb-4">Review the product spec sheet if you're unsure about the core functionality.</p>
           <button className="w-full py-2 bg-surface-container rounded-lg text-[10px] font-bold uppercase tracking-widest text-on-surface hover:bg-primary/10 hover:text-primary transition-all">
             Open PDF Viewer
           </button>

@@ -4,7 +4,7 @@ import {
   ShieldCheck, 
   MessageSquare, 
   Dumbbell, 
-  History, 
+  Megaphone, 
   HelpCircle, 
   LogOut,
   Bell,
@@ -27,7 +27,7 @@ export default function Layout({ children, currentScreen, onNavigate, user }: La
     { id: 'coach', label: 'AI Coach', icon: MessageSquare },
     { id: 'practice', label: 'Practice Zone', icon: Dumbbell },
     { id: 'community', label: 'Community', icon: Users },
-    { id: 'history', label: 'History', icon: History },
+    { id: 'announcements', label: 'Announcements', icon: Megaphone },
   ];
 
   return (

@@ -13,6 +13,7 @@ import Results from './components/Results';
 import Coach from './components/Coach';
 import Practice from './components/Practice';
 import Community from './components/Community';
+import Announcements from './components/Announcements';
 import Onboarding from './components/Onboarding';
 import Layout from './components/Layout';
 import { Screen } from './types';
@@ -62,6 +63,8 @@ export default function App() {
                   return <Practice onNavigate={setScreen} />;
                 case 'community':
                   return <Community />;
+                case 'announcements':
+                  return <Announcements />;
                 default:
                   return <Dashboard onNavigate={setScreen} user={user} />;
               }

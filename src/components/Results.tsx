@@ -1,6 +1,5 @@
 import { Trophy, Target, TrendingUp, ArrowRight, MessageSquare, Dumbbell, LayoutDashboard } from 'lucide-react';
 import { Screen } from '../types';
-const m211Image = "https://picsum.photos/seed/m211/800/600";
 
 interface ResultsProps {
   onNavigate: (screen: Screen) => void;
@@ -27,11 +26,6 @@ export default function Results({ onNavigate }: ResultsProps) {
         <p className="text-xl text-on-surface-variant max-w-2xl mx-auto leading-relaxed mb-8">
           Exceptional performance on the M211 Core series. You've demonstrated a high level of technical proficiency and strategic alignment.
         </p>
-        <div className="flex justify-center">
-          <div className="w-32 h-32 bg-white rounded-2xl editorial-shadow p-4 flex items-center justify-center">
-            <img src={m211Image} alt="M211" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
-          </div>
-        </div>
       </section>
 
       {/* Score Breakdown Grid */}
