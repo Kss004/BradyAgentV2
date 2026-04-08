@@ -1,4 +1,4 @@
-export type Screen = 'login' | 'onboarding' | 'dashboard' | 'readiness-intro' | 'assessment' | 'results' | 'coach' | 'practice' | 'community' | 'announcements';
+export type Screen = 'login' | 'onboarding' | 'dashboard' | 'readiness-intro' | 'assessment' | 'results' | 'coach' | 'practice' | 'community' | 'announcements' | 'profile-readiness';
 
 export interface Module {
   id: string;

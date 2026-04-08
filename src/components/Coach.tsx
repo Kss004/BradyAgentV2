@@ -3,6 +3,7 @@ import React from 'react';
 import { Send, Brain, User, Sparkles, ChevronRight, Mic, Paperclip, Video, Play, ExternalLink, Stars } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Screen } from '../types';
+import GenerateLiveVideoImg from '../assets/GenerateLiveVideo.png';
 
 interface Message {
   id: string;
@@ -112,6 +113,22 @@ export default function Coach({ onNavigate }: CoachProps) {
     { title: "Create a Batch of Sequenced Labels with the Express Labels App", expert: "Brady Corp", thumbnail: "https://img.youtube.com/vi/W0JWPw2udpI/hqdefault.jpg", duration: "2:04", url: "https://www.youtube.com/watch?v=W0JWPw2udpI" },
   ];
 
+  const handleGenerateVideo = (msgId: string) => {
+    setMessages(prev => prev.map(m => 
+      m.id === msgId 
+        ? { 
+            ...m, 
+            attachment: { 
+              type: 'video', 
+              url: GenerateLiveVideoImg, 
+              name: 'Live Coaching Session ' 
+            } 
+          } 
+        : m
+    ));
+  };
+
+
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-160px)] flex gap-8">
       {/* Main Chat Area */}
@@ -167,12 +184,15 @@ export default function Coach({ onNavigate }: CoachProps) {
                       : 'bg-primary text-white rounded-tr-none shadow-lg shadow-primary/10'
                   }`}>
                     {msg.attachment?.type === 'video' && (
-                      <div className="mb-4 relative rounded-lg overflow-hidden bg-black/10 aspect-video flex items-center justify-center border border-white/20">
-                        <Video className="w-8 h-8 opacity-50" />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                          <Play className="w-10 h-10 text-white fill-current" />
+                      <div className="mb-4 relative rounded-lg overflow-hidden bg-black/10 aspect-video flex items-center justify-center border border-outline-variant/10 group cursor-pointer">
+                        {msg.attachment.url && !msg.attachment.url.startsWith('blob:') && (
+                           <img src={msg.attachment.url} alt="Video Thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-80" referrerPolicy="no-referrer" />
+                        )}
+                        <Video className="w-8 h-8 opacity-50 absolute z-0" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors z-10">
+                          <Play className="w-12 h-12 text-white fill-current shadow-lg drop-shadow-lg" />
                         </div>
-                        <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white bg-black/40 px-2 py-1 rounded">
+                        <span className="absolute bottom-2 left-2 text-[10px] font-bold text-white bg-black/60 backdrop-blur-md px-2 py-1 rounded z-20">
                           {msg.attachment.name}
                         </span>
                       </div>
@@ -188,6 +208,15 @@ export default function Coach({ onNavigate }: CoachProps) {
                     >
                       {msg.content}
                     </ReactMarkdown>
+                    {msg.role === 'assistant' && msg.id !== '1' && !msg.attachment && (
+                      <button 
+                        onClick={() => handleGenerateVideo(msg.id)}
+                        className="mt-4 px-4 py-2 bg-primary/10 text-primary hover:bg-primary hover:text-white text-xs font-bold font-display uppercase tracking-widest rounded-lg flex items-center gap-2 transition-all"
+                      >
+                        <Video className="w-4 h-4" />
+                        Generate Live Video
+                      </button>
+                    )}
                   </div>
                   <span className="text-[10px] font-display font-bold text-on-surface-variant uppercase tracking-widest px-2 block">
                     {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

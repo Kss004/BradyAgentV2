@@ -24,6 +24,19 @@ export default function Dashboard({ onNavigate, user }: DashboardProps) {
         </div>
       </header>
 
+      {/* Announcement */}
+      <div className="mb-12 bg-primary/5 border border-primary/10 py-3 px-6 rounded-xl flex items-center gap-4 overflow-hidden shadow-sm">
+        <span className="shrink-0 font-bold font-display uppercase tracking-widest text-[10px] bg-primary text-white px-3 py-1.5 rounded-full shadow-md">Announcements</span>
+        <div className="flex-1 font-medium text-sm text-primary">
+          <button 
+            onClick={() => onNavigate('announcements')} 
+            className="hover:underline hover:text-primary-container cursor-pointer transition-colors"
+          >
+            🚀 M211 Firmware v2.1 Update Release
+          </button>
+        </div>
+      </div>
+
       {/* Top Featured Row */}
       <section className="grid grid-cols-12 gap-8 mb-12">
         {/* Readiness Status Card */}
@@ -43,6 +56,14 @@ export default function Dashboard({ onNavigate, user }: DashboardProps) {
                 <div className="h-full bg-tertiary w-[12%] rounded-full"></div>
               </div>
             </div>
+            
+            <button 
+              onClick={() => onNavigate('profile-readiness')}
+              className="mt-6 w-full py-3 bg-surface-container rounded-xl text-xs font-bold font-display uppercase tracking-widest text-on-surface hover:bg-primary/10 hover:text-primary transition-all flex items-center justify-center gap-2"
+            >
+              Read more
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
           <div className="absolute -right-8 -bottom-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
             <ShieldCheck className="w-48 h-48" />

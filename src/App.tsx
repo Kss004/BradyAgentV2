@@ -14,6 +14,7 @@ import Coach from './components/Coach';
 import Practice from './components/Practice';
 import Community from './components/Community';
 import Announcements from './components/Announcements';
+import ProfileReadiness from './components/ProfileReadiness';
 import Onboarding from './components/Onboarding';
 import Layout from './components/Layout';
 import { Screen } from './types';
@@ -65,6 +66,8 @@ export default function App() {
                   return <Community />;
                 case 'announcements':
                   return <Announcements onNavigate={setScreen} />;
+                case 'profile-readiness':
+                  return <ProfileReadiness onNavigate={setScreen} />;
                 default:
                   return <Dashboard onNavigate={setScreen} user={user} />;
               }

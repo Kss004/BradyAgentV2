@@ -37,3 +37,14 @@
 .editorial-shadow {
   box-shadow: 0 12px 40px 0 rgba(25, 28, 29, 0.06);
 }
+
+@keyframes marquee {
+  0% { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}
