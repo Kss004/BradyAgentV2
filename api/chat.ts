@@ -26,9 +26,47 @@ Use the following facts to answer questions, test knowledge, and roleplay:
 When users interact with you, act as a professional, encouraging mentor. Answer their questions accurately using only these specs. 
 `;
 
+// Simple in-memory rate limiter for Edge Runtime
+const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute setup
+  const maxRequests = 15; // Max 15 questions per minute per user
+
+  const record = rateLimitMap.get(ip);
+  if (!record) {
+    rateLimitMap.set(ip, { count: 1, timestamp: now });
+    return false;
+  }
+
+  if (now - record.timestamp > windowMs) {
+    rateLimitMap.set(ip, { count: 1, timestamp: now });
+    return false;
+  }
+
+  if (record.count >= maxRequests) {
+    return true;
+  }
+
+  record.count++;
+  return false;
+}
+
 export default async function req(request: Request) {
   if (request.method !== 'POST') {
     return new Response('Method Not Allowed', { status: 405 });
+  }
+
+  // Identify user IP address from Vercel headers
+  const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+  
+  // Rate Limit check: return 429 status code if spamming
+  if (isRateLimited(ip)) {
+    return new Response(JSON.stringify({ text: "You are asking questions too quickly! Please wait a minute." }), { 
+      status: 429,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
