@@ -32,7 +32,7 @@ export default function Dashboard({ onNavigate, user }: DashboardProps) {
             onClick={() => onNavigate('announcements')} 
             className="hover:underline hover:text-primary-container cursor-pointer transition-colors"
           >
-            🚀 M211 Firmware v2.1 Update Release
+             M211 Firmware v2.1 Update Release
           </button>
         </div>
       </div>
