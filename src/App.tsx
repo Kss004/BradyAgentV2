@@ -64,7 +64,7 @@ export default function App() {
                 case 'community':
                   return <Community />;
                 case 'announcements':
-                  return <Announcements />;
+                  return <Announcements onNavigate={setScreen} />;
                 default:
                   return <Dashboard onNavigate={setScreen} user={user} />;
               }

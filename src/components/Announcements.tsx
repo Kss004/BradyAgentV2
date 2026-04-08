@@ -1,5 +1,10 @@
 import React from 'react';
 import { Megaphone, Calendar, Tag, ArrowUpRight } from 'lucide-react';
+import { Screen } from '../types';
+
+interface AnnouncementsProps {
+  onNavigate: (screen: Screen) => void;
+}
 
 const announcements = [
   {
@@ -28,7 +33,7 @@ const announcements = [
   }
 ];
 
-export default function Announcements() {
+export default function Announcements({ onNavigate }: AnnouncementsProps) {
   return (
     <div className="max-w-4xl mx-auto pb-12">
       <div className="mb-10">
@@ -67,9 +72,38 @@ export default function Announcements() {
                   {item.title}
                   <ArrowUpRight className="w-5 h-5 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all text-primary" />
                 </h3>
-                <p className="text-on-surface-variant leading-relaxed">
+                <p className="text-on-surface-variant leading-relaxed mb-4">
                   {item.content}
                 </p>
+                <div className="flex flex-wrap items-center gap-6 mt-4 relative z-20">
+                  <a 
+                    href="https://www.youtube.com/watch?v=zieGEi-OI8c" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-sm font-bold font-display text-primary hover:text-on-surface transition-colors flex items-center gap-1 underline underline-offset-4 decoration-primary/30"
+                  >
+                    Watch a Video
+                  </a>
+                  <a 
+                    href="https://www.bradyindia.co.in/label-printers/portable/m211-portable-bluetooth-label-printer-pid-170380" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-sm font-bold font-display text-primary hover:text-on-surface transition-colors flex items-center gap-1 underline underline-offset-4 decoration-primary/30"
+                  >
+                    Read More
+                  </a>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onNavigate('community');
+                    }}
+                    className="text-sm font-bold font-display text-primary hover:text-on-surface transition-colors flex items-center gap-1 underline underline-offset-4 decoration-primary/30"
+                  >
+                    Ask in the Community
+                  </button>
+                </div>
               </div>
             </div>
 
