@@ -18,6 +18,7 @@ import ProfileReadiness from './components/ProfileReadiness';
 import Onboarding from './components/Onboarding';
 import Layout from './components/Layout';
 import { Screen } from './types';
+import { Analytics } from "@vercel/analytics/react"
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('login');
@@ -81,6 +82,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-surface selection:bg-primary/10 selection:text-primary">
       {renderScreen()}
+      <Analytics />
     </div>
   );
 }
