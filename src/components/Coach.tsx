@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import React from 'react';
 import { Send, Brain, User, Sparkles, ChevronRight, Mic, Paperclip, Video, Play, ExternalLink, Stars } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { Screen } from '../types';
 
 interface Message {
@@ -30,6 +31,7 @@ export default function Coach({ onNavigate }: CoachProps) {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [isAiThinking, setIsAiThinking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,7 +41,7 @@ export default function Coach({ onNavigate }: CoachProps) {
     }
   }, [messages]);
 
-  const handleSend = (attachment?: Message['attachment']) => {
+  const handleSend = async (attachment?: Message['attachment']) => {
     if (!inputValue.trim() && !attachment) return;
 
     const userMessage: Message = {
@@ -52,19 +54,40 @@ export default function Coach({ onNavigate }: CoachProps) {
 
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
+    setIsAiThinking(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiMessage: Message = {
+    try {
+      // Map messages for the OpenAI API
+      const reqMessages = [...messages, userMessage].map(m => ({
+        role: m.role,
+        content: m.content
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: reqMessages })
+      });
+      
+      const data = await res.json();
+      
+      setIsAiThinking(false);
+      setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: attachment?.type === 'video' 
-          ? "I've analyzed your video pitch. Your body language is very confident! However, you might want to slow down when explaining the M211's Bridge-Mode protocol. Should we break down that specific section?"
-          : "That's a great question. When an IT Director mentions 'legacy friction', they're usually worried about downtime during the migration. The M211 addresses this with its 'Bridge-Mode' protocol. Should we roleplay how to explain that simply?",
+        content: data.text || "Sorry, I had trouble processing that response.",
         timestamp: new Date()
-      };
-      setMessages(prev => [...prev, aiMessage]);
-    }, 1000);
+      }]);
+    } catch (e) {
+      console.error(e);
+      setIsAiThinking(false);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "Connection error: please ensure OPENAI_API_KEY is configured in your Vercel project environment.",
+        timestamp: new Date()
+      }]);
+    }
   };
 
   const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,9 +107,9 @@ export default function Coach({ onNavigate }: CoachProps) {
   };
 
   const expertVideos = [
-    { title: "Closing the M211 Deal", expert: "Marcus V.", thumbnail: "https://picsum.photos/seed/expert1/400/250", duration: "4:20" },
-    { title: "Handling Enterprise Objections", expert: "Sarah J.", thumbnail: "https://picsum.photos/seed/expert2/400/250", duration: "6:15" },
-    { title: "Technical Deep Dive: Bridge-Mode", expert: "David K.", thumbnail: "https://picsum.photos/seed/expert3/400/250", duration: "8:45" },
+    { title: "Brady M211 Portable Bluetooth Label Printer | Overview", expert: "Brady Corp", thumbnail: "https://img.youtube.com/vi/zieGEi-OI8c/hqdefault.jpg", duration: "1:07", url: "https://www.youtube.com/watch?v=zieGEi-OI8c" },
+    { title: "Brady M211 Bluetooth Label Printer - Cartridges Explained", expert: "Brady Corp", thumbnail: "https://img.youtube.com/vi/G8Mr9SSbzUQ/hqdefault.jpg", duration: "1:33", url: "https://www.youtube.com/watch?v=G8Mr9SSbzUQ" },
+    { title: "Create a Batch of Sequenced Labels with the Express Labels App", expert: "Brady Corp", thumbnail: "https://img.youtube.com/vi/W0JWPw2udpI/hqdefault.jpg", duration: "2:04", url: "https://www.youtube.com/watch?v=W0JWPw2udpI" },
   ];
 
   return (
@@ -154,7 +177,17 @@ export default function Coach({ onNavigate }: CoachProps) {
                         </span>
                       </div>
                     )}
-                    {msg.content}
+                    <ReactMarkdown 
+                      components={{
+                        strong: ({node, ...props}) => <strong className="font-bold text-on-surface" {...props} />,
+                        p: ({node, ...props}) => <p className="mb-3 last:mb-0" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-3 space-y-1 block" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-3 space-y-1 block" {...props} />,
+                        li: ({node, ...props}) => <li className="pl-1 leading-relaxed" {...props} />
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
                   </div>
                   <span className="text-[10px] font-display font-bold text-on-surface-variant uppercase tracking-widest px-2 block">
                     {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -170,6 +203,20 @@ export default function Coach({ onNavigate }: CoachProps) {
                 <div className="max-w-[70%] bg-surface-container/30 p-4 rounded-2xl rounded-tr-none border border-dashed border-outline-variant flex items-center gap-3">
                   <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                   <span className="text-xs font-bold font-display text-on-surface-variant uppercase tracking-widest">Uploading video...</span>
+                </div>
+              </div>
+            )}
+            {isAiThinking && (
+              <div className="flex gap-4">
+                <div className="w-10 h-10 shrink-0 rounded-full bg-primary text-white shadow-md shadow-primary/20 flex items-center justify-center">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div className="max-w-[70%] space-y-2">
+                  <div className="p-5 rounded-2xl bg-surface-container/50 text-on-surface rounded-tl-none border border-outline-variant/5 flex items-center gap-2 h-full min-h-[52px]">
+                    <div className="w-2 h-2 bg-on-surface-variant/40 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-on-surface-variant/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-on-surface-variant rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  </div>
                 </div>
               </div>
             )}
@@ -235,7 +282,7 @@ export default function Coach({ onNavigate }: CoachProps) {
 
           <div className="space-y-8">
             {expertVideos.map((video, i) => (
-              <div key={i} className="group cursor-pointer">
+              <a href={video.url} target="_blank" rel="noopener noreferrer" key={i} className="group cursor-pointer block">
                 <div className="relative aspect-video rounded-xl overflow-hidden mb-3 border border-outline-variant/10">
                   <img 
                     src={video.thumbnail} 
@@ -257,7 +304,7 @@ export default function Coach({ onNavigate }: CoachProps) {
                   <span className="text-[10px] font-display font-bold text-on-surface-variant uppercase tracking-widest">{video.expert}</span>
                   <ExternalLink className="w-3 h-3 text-outline opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 
