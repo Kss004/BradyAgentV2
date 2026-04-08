@@ -1,0 +1,5 @@
+{
+  "name": "Brady AI",
+  "description": "AI-powered sales onboarding and coaching platform for Brady Corporation products.",
+  "requestFramePermissions": ["microphone"]
+}
